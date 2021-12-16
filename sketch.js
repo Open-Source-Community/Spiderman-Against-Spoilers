@@ -2,7 +2,7 @@ let bullets = [];
 let enemies = [];
 let spawningRate = 1;
 let score = 0;
-
+let levelModuls = 40;
 var cnv;
 var x, y;
 function centerCanvas() 
@@ -72,7 +72,7 @@ function draw()
                 spawnEnemies(spawningRate);
                 score++;
               
-                if(score % 20 == 0)
+                if(score % levelModuls == 0 && spawningRate < 5)
                   spawningRate++;
             }
           
