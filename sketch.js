@@ -19,7 +19,7 @@ function windowResized()
 
 function setup() 
 {
-    cnv = createCanvas(900, 900);
+    cnv = createCanvas(700, 700);
     centerCanvas();
     spawnEnemies(5);
 }
