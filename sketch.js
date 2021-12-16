@@ -3,9 +3,24 @@ let enemies = [];
 let spawningRate = 1;
 let score = 0;
 
+var cnv;
+var x, y;
+function centerCanvas() 
+{
+    x = (windowWidth - width) / 2;
+    y = (windowHeight - height) / 2;
+    cnv.position(x, y);
+}
+
+function windowResized() 
+{
+    centerCanvas();
+}
+
 function setup() 
 {
-    createCanvas(600, 600);
+    cnv = createCanvas(900, 900);
+    centerCanvas();
     spawnEnemies(5);
 }
 
