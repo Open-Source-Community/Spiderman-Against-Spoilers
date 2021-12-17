@@ -25,7 +25,7 @@ function preload(){
 
 function setup() 
 {
-    cnv = createCanvas(1000, 680);
+    cnv = createCanvas(1400, 670);
     spiderman = new Spiderman()
     centerCanvas();
 }
