@@ -1,10 +1,10 @@
+let spiderman;
 let bullets = [];
-let enemies = [];
-let spawningRate = 1;
+let spoilers = [];
 let score = 0;
-let levelModuls = 40;
 var cnv;
 var x, y;
+
 function centerCanvas() 
 {
     x = (windowWidth - width) / 2;
@@ -17,105 +17,108 @@ function windowResized()
     centerCanvas();
 }
 
+function preload(){
+    bg = loadImage('background.jpeg');
+    spidyImg = loadImage("yalahwyy_spiderman.png");
+    swing = loadImage("swing.png");
+}
+
 function setup() 
 {
-    cnv = createCanvas(700, 700);
+    cnv = createCanvas(1000, 680);
+    spiderman = new Spiderman()
     centerCanvas();
-    spawnEnemies(5);
 }
 
 function draw() 
 {
-    background(40);
-    rectMode(CENTER);
-    fill(255);
-    noStroke();
-    
-    textSize(30);
-    textAlign(CENTER);
+    // spoilers push
+    if(random(1) < 0.025){
+      spoilers.push(new Spoiler())
+    }
   
-    text(score, 30, 40)
   
+    //background
+    background(bg);
+    fill(0,0,0,235)
+    rect(0,0,width,height)
+  
+  
+      //score
+    fill(255,255,255)
+    textSize(27);
+    text(score,width - 30,120)
+  
+
     // draw the player
-    circle(mouseX, mouseY, 40);
+    //
+    spiderman.draw();
+    spiderman.move();
+  
   
     // draw the bullets
     for(let bullet of bullets)
     {
-      circle(bullet.x, bullet.y, 10);
-      bullet.y -= 5;
+      bullet.draw();
+      bullet.move()
       if(bullet.y < 0)
-        splice(bullets.indexOf(bullet), 1);
+        bullets.splice(bullets.indexOf(bullet), 1);
     }
   
-    // draw enemies
-    for(let enemy of enemies)
+  
+    // draw spoilers
+    for(let spoil of spoilers)
     {  
-        
-        fill(int(random(256)), 0, int(random(256)))
-        rect(enemy.x, enemy.y, 30, 20);
-        enemy.y += 1.5; 
+        spoil.move();
+        spoil.draw();
     }
-    fill(255);
   
     // collisions
-    for(let enemy of enemies)
+    for(let spoil of spoilers)
     {
+        // handle P x E collision & handle E x H
+        if(hits(spiderman, spoil) || spoil.y >= height )  gameOver();
+      
+      
         for(let bullet of bullets)
         {
             // handle E x B collision
-            if(dist(enemy.x, enemy.y, bullet.x, bullet.y) <= 20)
+            if(hits(spoil, bullet))
             {
                 bullets.splice(bullets.indexOf(bullet), 1);
-                enemies.splice(enemies.indexOf(enemy), 1);
-                
-                spawnEnemies(spawningRate);
+                spoilers.splice(spoilers.indexOf(spoil), 1);
                 score++;
-              
-                if(score % levelModuls == 0 && spawningRate < 5)
-                  spawningRate++;
             }
-          
-            // handle P x E collision
-            if(dist(enemy.x, enemy.y, mouseX, mouseY) <= 10)
-              gameOver();
-            
-            // handle E x H
-            if(enemy.y >= height)
-              gameOver();
         }
+
     }
 }
 
 function gameOver()
 {
-    textSize(30);
+  
+    background(bg);
+    fill(0,0,0,235)
+    rect(0,0,width,height)
+    textSize(25);
+    fill(148, 26, 38);
+    textAlign(RIGHT);
+    text("Steps so you don't cry-lose again ya loser: ", width/2 + 70, height/2 - 30)
     textAlign(CENTER);
-    fill(255, 0, 0);
-    text("GAME OVER YA LOSER ", width/2, height/2)
-    text("YOUR SCORE : " + score, width/2, height/2 + 30)
+    text("1.block anyone who thinks it is funny to spoil.", width/2 - 50, height/2 + 10)
+    text("2.watch any movie once it released or", width/2 - 88, height/2 + 35)
+    text("just live in a cave until you watch it.", width/2 - 75, height/2 + 60)
+    text("YOUR SCORE : " + score, width/2, height/2 + 125)
     noLoop();
 }
-function spawnEnemies(n)
-{
-    for(let i = 0; i < n; i++)
-    {
-        let enemy = 
-         {
-           x: random(0, width),
-           y: 0,
-           w: random(20, 60)
-         };
-        enemies.push(enemy);
-    }
+
+function hits(obj1,obj2){
+  return collideRectRect(obj1.x, obj1.y, obj1.w, obj1.h + 5 , obj2.x, obj2.y, obj2.w, obj2.h + 10);
 }
+
 function mousePressed()
 {
     // spawn a bullet
-    let bullet = 
-        {
-          x: mouseX,
-          y: mouseY
-        };
-    bullets.push(bullet)  
+    let bullet = new Bullet(mouseX, mouseY);
+    bullets.push(bullet);
 }
