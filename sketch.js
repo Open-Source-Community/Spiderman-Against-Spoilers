@@ -25,7 +25,7 @@ function preload(){
 
 function setup() 
 {
-    cnv = createCanvas(1400, 670);
+    cnv = createCanvas(1350, 600);
     spiderman = new Spiderman()
     centerCanvas();
 }
@@ -47,7 +47,7 @@ function draw()
       //score
     fill(255,255,255)
     textSize(27);
-    text(score,width - 30,120)
+    text(score,width - 30,100)
   
 
     // draw the player
